@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>OBSIDIAN</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <h1 class="logo">OBSIDIAN</h1>
+
+            <div class="profile-box">
+                <h3>Tu Perfil</h3>
+
+                <input type="text" id="name" placeholder="Tu nombre">
+
+                <textarea id="motivation" placeholder="Tu motivación"></textarea>
+
+                <textarea id="purpose" placeholder="¿Por qué quieres hacerlo?"></textarea>
+            </div>
+
+            <div class="goals-box">
+                <h3>Metas</h3>
+
+                <input type="text" id="goalInput" placeholder="Agregar meta">
+                <button onclick="addGoal()">Agregar</button>
+
+                <ul id="goalList"></ul>
+            </div>
+        </aside>
+
+        <!-- MAIN -->
+        <main class="main-content">
+
+            <div class="top-section">
+
+                <!-- GRAFICA -->
+                <div class="chart-box">
+                    <h2>Progreso</h2>
+                    <canvas id="progressChart"></canvas>
+                </div>
+
+                <!-- CIRCULO -->
+                <div class="circle-progress">
+                    <h2>Completado</h2>
+
+                    <div class="progress-ring">
+                        <span id="percentage">0%</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- EJERCICIOS -->
+            <section class="exercise-section">
+
+                <h2>Rutina Personal</h2>
+
+                <div class="add-exercise">
+
+                    <input
+                        type="text"
+                        id="exerciseName"
+                        placeholder="Ejercicio"
+                    >
+
+                    <input
+                        type="number"
+                        id="exerciseTime"
+                        placeholder="Minutos"
+                    >
+
+                    <button onclick="addExercise()">
+                        Agregar
+                    </button>
+                </div>
+
+                <div class="exercise-list" id="exerciseList">
+
+                </div>
+
+            </section>
+
+            <!-- TEMPORIZADOR -->
+            <section class="timer-section">
+
+                <h2>Modo Entrenamiento</h2>
+
+                <div class="exercise-screen">
+
+                    <h1 id="currentExercise">
+                        Esperando rutina...
+                    </h1>
+
+                    <div id="timer">
+                        00:00
+                    </div>
+
+                    <button onclick="startWorkout()">
+                        Comenzar
+                    </button>
+
+                </div>
+
+            </section>
+
+            <!-- CALENDARIO -->
+            <section class="calendar-section">
+
+                <h2>Mes Actual</h2>
+
+                <div class="calendar-grid" id="calendarGrid">
+
+                </div>
+
+            </section>
+
+            <!-- HOJAS -->
+            <div class="tabs">
+
+                <button>Enero</button>
+                <button>Febrero</button>
+                <button>Marzo</button>
+                <button>Abril</button>
+                <button>Mayo</button>
+                <button>Junio</button>
+                <button>Julio</button>
+                <button>Agosto</button>
+                <button>Septiembre</button>
+                <button>Octubre</button>
+                <button>Noviembre</button>
+                <button>Diciembre</button>
+
+            </div>
+
+        </main>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
