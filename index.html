@@ -1,70 +1,96 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OBSIDIAN</title>
 
     <link rel="stylesheet" href="style.css">
 
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
-    <div class="container">
+<div class="app">
 
-        <!-- SIDEBAR -->
-        <aside class="sidebar">
-            <h1 class="logo">OBSIDIAN</h1>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
 
-            <div class="profile-box">
-                <h3>Tu Perfil</h3>
+        <div class="logo-box">
+            <h1>OBSIDIAN</h1>
+            <p>Discipline • Focus • Evolution</p>
+        </div>
 
-                <input type="text" id="name" placeholder="Tu nombre">
+        <div class="profile-card">
+            <h2>Tu Perfil</h2>
 
-                <textarea id="motivation" placeholder="Tu motivación"></textarea>
+            <input type="text" id="name" placeholder="Tu nombre">
 
-                <textarea id="purpose" placeholder="¿Por qué quieres hacerlo?"></textarea>
-            </div>
+            <textarea id="motivation" placeholder="Tu motivación"></textarea>
 
-            <div class="goals-box">
-                <h3>Metas</h3>
+            <textarea id="purpose" placeholder="¿Por qué quieres hacerlo?"></textarea>
+        </div>
 
+        <div class="goal-card">
+            <h2>Metas</h2>
+
+            <div class="goal-input">
                 <input type="text" id="goalInput" placeholder="Agregar meta">
-                <button onclick="addGoal()">Agregar</button>
-
-                <ul id="goalList"></ul>
+                <button onclick="addGoal()">+</button>
             </div>
-        </aside>
 
-        <!-- MAIN -->
-        <main class="main-content">
+            <ul id="goalList"></ul>
+        </div>
 
-            <div class="top-section">
+    </aside>
 
-                <!-- GRAFICA -->
-                <div class="chart-box">
-                    <h2>Progreso</h2>
-                    <canvas id="progressChart"></canvas>
+    <!-- MAIN -->
+    <main class="dashboard">
+
+        <!-- TOP -->
+        <section class="top-grid">
+
+            <!-- GRAFICA -->
+            <div class="panel graph-panel">
+                <div class="panel-title">
+                    <h2>Progreso Mensual</h2>
                 </div>
 
-                <!-- CIRCULO -->
-                <div class="circle-progress">
-                    <h2>Completado</h2>
+                <canvas id="progressChart"></canvas>
+            </div>
 
-                    <div class="progress-ring">
-                        <span id="percentage">0%</span>
+            <!-- PROGRESO -->
+            <div class="panel progress-panel">
+
+                <h2>Completado</h2>
+
+                <div class="circle-box">
+                    <div class="circle">
+                        <span id="percentage">
+                            0%
+                        </span>
                     </div>
                 </div>
 
+                <p>Tu progreso actual</p>
+
             </div>
 
+        </section>
+
+        <!-- SEGUNDA FILA -->
+        <section class="middle-grid">
+
             <!-- EJERCICIOS -->
-            <section class="exercise-section">
+            <div class="panel exercise-panel">
 
-                <h2>Rutina Personal</h2>
+                <div class="panel-title">
+                    <h2>Rutina Personal</h2>
+                </div>
 
-                <div class="add-exercise">
+                <div class="exercise-inputs">
 
                     <input
                         type="text"
@@ -81,20 +107,25 @@
                     <button onclick="addExercise()">
                         Agregar
                     </button>
-                </div>
-
-                <div class="exercise-list" id="exerciseList">
 
                 </div>
 
-            </section>
+                <div
+                    class="exercise-list"
+                    id="exerciseList"
+                >
+                </div>
+
+            </div>
 
             <!-- TEMPORIZADOR -->
-            <section class="timer-section">
+            <div class="panel timer-panel">
 
-                <h2>Modo Entrenamiento</h2>
+                <div class="panel-title">
+                    <h2>Modo Entrenamiento</h2>
+                </div>
 
-                <div class="exercise-screen">
+                <div class="timer-screen">
 
                     <h1 id="currentExercise">
                         Esperando rutina...
@@ -104,50 +135,57 @@
                         00:00
                     </div>
 
-                    <button onclick="startWorkout()">
-                        Comenzar
+                    <button
+                        class="start-btn"
+                        onclick="startWorkout()"
+                    >
+                        Iniciar Rutina
                     </button>
 
                 </div>
 
-            </section>
-
-            <!-- CALENDARIO -->
-            <section class="calendar-section">
-
-                <h2>Mes Actual</h2>
-
-                <div class="calendar-grid" id="calendarGrid">
-
-                </div>
-
-            </section>
-
-            <!-- HOJAS -->
-            <div class="tabs">
-
-                <button>Enero</button>
-                <button>Febrero</button>
-                <button>Marzo</button>
-                <button>Abril</button>
-                <button>Mayo</button>
-                <button>Junio</button>
-                <button>Julio</button>
-                <button>Agosto</button>
-                <button>Septiembre</button>
-                <button>Octubre</button>
-                <button>Noviembre</button>
-                <button>Diciembre</button>
-
             </div>
 
-        </main>
+        </section>
 
-    </div>
+        <!-- CALENDARIO -->
+        <section class="panel calendar-panel">
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <div class="panel-title">
+                <h2>Calendario de Progreso</h2>
+            </div>
 
-    <script src="script.js"></script>
+            <div
+                class="calendar-grid"
+                id="calendarGrid"
+            >
+            </div>
+
+        </section>
+
+        <!-- PESTAÑAS -->
+        <section class="months-bar">
+
+            <button>Enero</button>
+            <button>Febrero</button>
+            <button>Marzo</button>
+            <button>Abril</button>
+            <button>Mayo</button>
+            <button>Junio</button>
+            <button>Julio</button>
+            <button>Agosto</button>
+            <button>Septiembre</button>
+            <button>Octubre</button>
+            <button>Noviembre</button>
+            <button>Diciembre</button>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="script.js"></script>
 
 </body>
 </html>
