@@ -1,32 +1,36 @@
-let exercises = [];
+ let exercises = [];
 let goals = [];
 
-const exerciseList = document.getElementById("exerciseList");
-const goalList = document.getElementById("goalList");
+const exerciseList =
+document.getElementById("exerciseList");
+
+const goalList =
+document.getElementById("goalList");
 
 const currentExercise =
-    document.getElementById("currentExercise");
+document.getElementById("currentExercise");
 
 const timer =
-    document.getElementById("timer");
+document.getElementById("timer");
 
 const percentage =
-    document.getElementById("percentage");
+document.getElementById("percentage");
 
-/* ------------------ */
 /* GUARDAR DATOS */
-/* ------------------ */
 
-function saveData() {
+function saveData(){
 
     const data = {
         exercises,
         goals,
-        name: document.getElementById("name").value,
+        name:
+        document.getElementById("name").value,
+
         motivation:
-            document.getElementById("motivation").value,
+        document.getElementById("motivation").value,
+
         purpose:
-            document.getElementById("purpose").value
+        document.getElementById("purpose").value
     };
 
     localStorage.setItem(
@@ -35,45 +39,51 @@ function saveData() {
     );
 }
 
-function loadData() {
+/* CARGAR DATOS */
+
+function loadData(){
 
     const saved =
-        localStorage.getItem("obsidianData");
+    localStorage.getItem("obsidianData");
 
-    if (!saved) return;
+    if(!saved) return;
 
-    const data = JSON.parse(saved);
+    const data =
+    JSON.parse(saved);
 
-    exercises = data.exercises || [];
-    goals = data.goals || [];
+    exercises =
+    data.exercises || [];
+
+    goals =
+    data.goals || [];
 
     document.getElementById("name").value =
-        data.name || "";
+    data.name || "";
 
     document.getElementById("motivation").value =
-        data.motivation || "";
+    data.motivation || "";
 
     document.getElementById("purpose").value =
-        data.purpose || "";
+    data.purpose || "";
 
     renderExercises();
     renderGoals();
+    updateProgress();
 }
 
-/* ------------------ */
 /* METAS */
-/* ------------------ */
 
-function addGoal() {
+function addGoal(){
 
     const input =
-        document.getElementById("goalInput");
+    document.getElementById("goalInput");
 
-    const text = input.value.trim();
+    const value =
+    input.value.trim();
 
-    if (text === "") return;
+    if(value === "") return;
 
-    goals.push(text);
+    goals.push(value);
 
     input.value = "";
 
@@ -81,19 +91,21 @@ function addGoal() {
     saveData();
 }
 
-function renderGoals() {
+function renderGoals(){
 
     goalList.innerHTML = "";
 
-    goals.forEach((goal, index) => {
+    goals.forEach((goal,index)=>{
 
         const li =
-            document.createElement("li");
+        document.createElement("li");
+
+        li.style.marginBottom = "10px";
 
         li.innerHTML = `
             ${goal}
-            <button onclick="removeGoal(${index})">
-                ❌
+            <button onclick="deleteGoal(${index})">
+            ❌
             </button>
         `;
 
@@ -101,36 +113,33 @@ function renderGoals() {
     });
 }
 
-function removeGoal(index) {
+function deleteGoal(index){
 
-    goals.splice(index, 1);
+    goals.splice(index,1);
 
     renderGoals();
     saveData();
 }
 
-/* ------------------ */
 /* EJERCICIOS */
-/* ------------------ */
 
-function addExercise() {
+function addExercise(){
 
     const name =
-        document.getElementById("exerciseName")
-        .value
-        .trim();
+    document.getElementById("exerciseName")
+    .value.trim();
 
     const time =
-        document.getElementById("exerciseTime")
-        .value;
+    document.getElementById("exerciseTime")
+    .value;
 
-    if (name === "" || time === "")
-        return;
+    if(name === "" || time === "")
+    return;
 
     exercises.push({
         name,
-        time: Number(time),
-        done: false
+        time:Number(time),
+        completed:false
     });
 
     document.getElementById(
@@ -146,26 +155,24 @@ function addExercise() {
     saveData();
 }
 
-function renderExercises() {
+function renderExercises(){
 
     exerciseList.innerHTML = "";
 
-    exercises.forEach((exercise, index) => {
+    exercises.forEach((exercise,index)=>{
 
-        const div =
-            document.createElement("div");
+        const card =
+        document.createElement("div");
 
-        div.classList.add(
-            "exercise-card"
-        );
+        card.className =
+        "exercise-card";
 
-        if (exercise.done) {
-            div.classList.add("done");
-        }
-
-        div.innerHTML = `
+        card.innerHTML = `
             <div>
-                <h3>${exercise.name}</h3>
+                <h3>
+                    ${exercise.name}
+                </h3>
+
                 <p>
                     ${exercise.time}
                     min
@@ -173,273 +180,262 @@ function renderExercises() {
             </div>
 
             <div>
-                <button onclick="
-                    completeExercise(${index})
+
+                <button
+                onclick="
+                completeExercise(${index})
                 ">
-                    ✅
+                ✅
                 </button>
 
-                <button onclick="
-                    deleteExercise(${index})
+                <button
+                onclick="
+                deleteExercise(${index})
                 ">
-                    ❌
+                ❌
                 </button>
+
             </div>
         `;
 
-        exerciseList.appendChild(div);
+        if(exercise.completed){
+            card.style.border =
+            "2px solid lime";
+        }
+
+        exerciseList.appendChild(card);
     });
 }
 
-function deleteExercise(index) {
+function deleteExercise(index){
 
-    exercises.splice(index, 1);
-
-    renderExercises();
-    updateProgress();
-    saveData();
-}
-
-function completeExercise(index) {
-
-    exercises[index].done =
-        !exercises[index].done;
+    exercises.splice(index,1);
 
     renderExercises();
     updateProgress();
     saveData();
 }
 
-/* ------------------ */
+function completeExercise(index){
+
+    exercises[index].completed =
+    !exercises[index].completed;
+
+    renderExercises();
+    updateProgress();
+    saveData();
+}
+
 /* TEMPORIZADOR */
-/* ------------------ */
 
 let currentIndex = 0;
-let countdown;
 let seconds = 0;
+let interval;
 
-function startWorkout() {
+function startWorkout(){
 
-    if (exercises.length === 0)
+    if(exercises.length === 0){
+        alert(
+        "Agrega ejercicios primero"
+        );
         return;
+    }
 
     currentIndex = 0;
 
     startExercise();
 }
 
-function startExercise() {
+function startExercise(){
 
-    if (
-        currentIndex >=
-        exercises.length
-    ) {
+    if(currentIndex >= exercises.length){
 
         currentExercise.innerText =
-            "Rutina completada 🔥";
+        "Rutina completada 🔥";
 
-        timer.innerText = "00:00";
+        timer.innerText =
+        "00:00";
 
         return;
     }
 
     const exercise =
-        exercises[currentIndex];
+    exercises[currentIndex];
 
     currentExercise.innerText =
-        exercise.name;
+    exercise.name;
 
     seconds =
-        exercise.time * 60;
+    exercise.time * 60;
 
-    clearInterval(countdown);
+    clearInterval(interval);
 
-    countdown =
-        setInterval(() => {
+    interval =
+    setInterval(()=>{
 
-            const min =
-                Math.floor(
-                    seconds / 60
-                );
+        const mins =
+        Math.floor(seconds / 60);
 
-            const sec =
-                seconds % 60;
+        const secs =
+        seconds % 60;
 
-            timer.innerText =
-                `${String(min)
-                    .padStart(2, "0")}
-                :
-                ${String(sec)
-                    .padStart(2, "0")}`;
+        timer.innerText =
+        `${String(mins)
+        .padStart(2,"0")}:${String(secs)
+        .padStart(2,"0")}`;
 
-            seconds--;
+        seconds--;
 
-            if (seconds < 0) {
+        if(seconds < 0){
 
-                beep();
+            playSound();
 
-                exercises[
-                    currentIndex
-                ].done = true;
+            exercises[currentIndex]
+            .completed = true;
 
-                currentIndex++;
+            currentIndex++;
 
-                renderExercises();
-                updateProgress();
-                saveData();
+            renderExercises();
+            updateProgress();
+            saveData();
 
-                startExercise();
-            }
+            startExercise();
+        }
 
-        }, 1000);
+    },1000);
 }
 
-function beep() {
+/* SONIDO */
+
+function playSound(){
 
     const audio =
-        new Audio(
-            "https://actions.google.com/sounds/v1/alarms/beep_short.ogg"
-        );
+    new Audio(
+    "https://actions.google.com/sounds/v1/alarms/beep_short.ogg"
+    );
 
     audio.play();
 }
 
-/* ------------------ */
 /* CALENDARIO */
-/* ------------------ */
 
-function createCalendar() {
+function createCalendar(){
 
-    const grid =
-        document.getElementById(
-            "calendarGrid"
-        );
+    const calendar =
+    document.getElementById(
+    "calendarGrid"
+    );
 
-    grid.innerHTML = "";
+    calendar.innerHTML = "";
 
-    for (
-        let i = 1;
-        i <= 30;
-        i++
-    ) {
+    for(let i=1;i<=30;i++){
 
         const day =
-            document.createElement(
-                "div"
-            );
-
-        day.classList.add(
-            "day"
+        document.createElement(
+        "div"
         );
+
+        day.className = "day";
 
         day.innerText = i;
 
-        day.addEventListener(
-            "click",
-            () => {
+        day.onclick = ()=>{
 
-                if (
-                    day.classList.contains(
-                        "green"
-                    )
-                ) {
+            if(day.classList.contains(
+            "green")){
 
-                    day.classList.remove(
-                        "green"
-                    );
+                day.classList.remove(
+                "green"
+                );
 
-                    day.classList.add(
-                        "red"
-                    );
+                day.classList.add(
+                "red"
+                );
 
-                } else if (
-                    day.classList.contains(
-                        "red"
-                    )
-                ) {
-
-                    day.classList.remove(
-                        "red"
-                    );
-
-                } else {
-
-                    day.classList.add(
-                        "green"
-                    );
-                }
             }
-        );
 
-        grid.appendChild(day);
+            else if(day.classList.contains(
+            "red")){
+
+                day.classList.remove(
+                "red"
+                );
+
+            }
+
+            else{
+
+                day.classList.add(
+                "green"
+                );
+            }
+        };
+
+        calendar.appendChild(day);
     }
 }
 
-/* ------------------ */
 /* PROGRESO */
-/* ------------------ */
 
-function updateProgress() {
+function updateProgress(){
 
-    const done =
-        exercises.filter(
-            e => e.done
-        ).length;
+    const completed =
+    exercises.filter(
+    ex => ex.completed
+    ).length;
 
     const total =
-        exercises.length;
+    exercises.length;
 
     const progress =
-        total === 0
-        ? 0
-        : Math.round(
-            (done / total) * 100
-        );
+    total === 0
+    ? 0
+    : Math.round(
+    (completed / total) * 100
+    );
 
     percentage.innerText =
-        progress + "%";
+    progress + "%";
 
-    chart.data.datasets[0].data = [
-        done,
-        total - done
+    chart.data.datasets[0]
+    .data = [
+        completed,
+        total - completed
     ];
 
     chart.update();
 }
 
-/* ------------------ */
 /* GRAFICA */
-/* ------------------ */
 
 const ctx =
-    document
-    .getElementById(
-        "progressChart"
-    );
+document.getElementById(
+"progressChart"
+);
 
 const chart =
-    new Chart(ctx, {
-        type: "doughnut",
+new Chart(ctx,{
 
-        data: {
-            labels: [
-                "Completado",
-                "Faltante"
-            ],
+    type:"doughnut",
 
-            datasets: [{
-                data: [0, 100]
-            }]
-        },
+    data:{
+        labels:[
+            "Hecho",
+            "Falta"
+        ],
 
-        options: {
-            responsive: true
-        }
-    });
+        datasets:[{
+            data:[0,100]
+        }]
+    },
 
-/* ------------------ */
+    options:{
+        responsive:true,
+        cutout:"70%"
+    }
+});
+
 /* INICIAR */
-/* ------------------ */
 
 loadData();
 createCalendar();
